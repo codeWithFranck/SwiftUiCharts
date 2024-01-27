@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct Sport : Identifiable {
     let id = UUID()
@@ -23,12 +24,28 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
+            Text("Canadians' favorite sports")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding()
+            
+            Chart(sportData) {data in
+                SectorMark(
+                    angle: .value(Text(verbatim: data.name), data.percentage),
+                    outerRadius: data.name == "Basketball" ? 150 : 120,
+                    angularInset: 2.0
+                    
+                )
+                .foregroundStyle(by: .value("Name", data.name))
+                .annotation(position: .overlay) {
+                    Text(String(format: "%.0f", data.percentage))
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+            }
+            .frame(height: 500)
         .padding()
+        }
     }
 }
 
